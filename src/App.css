@@ -1,0 +1,26 @@
+.login-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.auth-buttons button {
+  margin: 10px;
+  padding: 12px 24px;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  border-radius: 4px;
+}
+
+.github-auth {
+  background-color: #24292e;
+  color: white;
+}
+
+.google-auth {
+  background-color: #4285f4;
+  color: white;
+}
