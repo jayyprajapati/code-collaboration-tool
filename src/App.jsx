@@ -3,14 +3,24 @@ import './App.css'
 import Login from './pages/login';
 import Dashboard from './pages/Dashboard';
 import EditorPage from './pages/EditorPage';
+import ProtectedRoute from './components/ProtectedRoute';
+
 
 function App() {
   return (
     <Router>
     <Routes>
       <Route path="/" element={<Login />} />
-      <Route path="/dashboard" element={<Dashboard />} />
-      <Route path="/editor/:sessionId" element={<EditorPage />} />
+      <Route path="/dashboard" element={
+        <ProtectedRoute>
+          <Dashboard />
+        </ProtectedRoute>
+        } />
+      <Route path="/editor/:sessionId" element={
+        <ProtectedRoute>
+          <EditorPage />
+        </ProtectedRoute>
+        } />
     </Routes>
   </Router>
   )
