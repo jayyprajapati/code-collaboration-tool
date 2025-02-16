@@ -51,7 +51,12 @@ export default function Dashboard() {
       const { valid, error } = await verifySession(joinData.id, joinData.pass);
 
       if (valid) {
-        navigate(`/editor/${joinData.id}`);
+        navigate(`/editor/${joinData.id}`, {
+          state: { 
+            sessionPassword: joinData.pass,
+            isOwner: false
+          } 
+        });
       } else {
         alert(error || "Invalid session credentials");
       }
