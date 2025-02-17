@@ -12,13 +12,17 @@
   "dependencies": {
     "@firebase/auth": "^1.9.0",
     "@monaco-editor/react": "^4.6.0",
+    "@xterm/addon-fit": "^0.10.0",
+    "@xterm/addon-webgl": "^0.18.0",
     "firebase": "^11.3.1",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
     "react-copy-to-clipboard": "^5.1.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^7.1.5",
-    "socket.io-client": "^4.8.1"
+    "socket.io-client": "^4.8.1",
+    "xterm": "^5.3.0",
+    "xterm-addon-fit": "^0.8.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.19.0",

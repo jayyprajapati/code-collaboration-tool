@@ -238,3 +238,23 @@
   padding: 4px 8px;
   border-radius: 4px;
 }
+
+.terminal-wrapper {
+  margin-top: 20px;
+  border: 1px solid #333;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.xterm-viewport {
+  background-color: #1e1e1e !important;
+}
+
+.run-button {
+  background: #4CAF50;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  margin-bottom: 10px;
+  cursor: pointer;
+}

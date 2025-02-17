@@ -8,6 +8,8 @@ import Loader from "../components/Loader";
 import Chat from "../components/Chat";
 import RoleManager from "../components/RoleManager";
 import { CopyToClipboard } from "react-copy-to-clipboard";
+// import CodeRunner from "../components/codeRunner";
+import TerminalUI from "../components/TerminalUI";
 
 export default function EditorPage() {
   const navigate = useNavigate();
@@ -16,25 +18,25 @@ export default function EditorPage() {
   const { socket, isConnected } = useSocket();
   const { currentUser } = useAuth();
 
-
   const [code, setCode] = useState("");
   const [language, setLanguage] = useState("javascript");
   const [users, setUsers] = useState([]);
   const [userRole, setUserRole] = useState("editor");
   const [chatMessages, setChatMessages] = useState([]);
   const [copied, setCopied] = useState(false);
+  const [isRunning, setIsRunning] = useState(false);
 
   const sessionPassword = location.state?.sessionPassword;
 
   useEffect(() => {
     if (!socket) return;
-  
+
     const codeUpdateHandler = (newCode) => {
-      setCode(prev => prev !== newCode ? newCode : prev);
+      setCode((prev) => (prev !== newCode ? newCode : prev));
     };
-  
+
     socket.on("code-update", codeUpdateHandler);
-  
+
     return () => {
       socket.off("code-update", codeUpdateHandler);
     };
@@ -49,7 +51,7 @@ export default function EditorPage() {
         sessionId,
         user: currentUser.displayName,
         password: sessionPassword,
-        userId: currentUser.uid
+        userId: currentUser.uid,
       });
 
       socket.on("session-data", ({ code: initialCode, chat, role }) => {
@@ -106,7 +108,6 @@ export default function EditorPage() {
     };
 
     socket.on("user-list", handleUserList);
-    
 
     return () => {
       socket.off("user-list", handleUserList);
@@ -127,8 +128,8 @@ export default function EditorPage() {
       ]);
     });
 
-    socket.on('session-ended', () => {
-      navigate('/dashboard');
+    socket.on("session-ended", () => {
+      navigate("/dashboard");
     });
 
     return () => {
@@ -145,6 +146,15 @@ export default function EditorPage() {
         code: value,
       });
     }
+  };
+
+  const handleRun = () => {
+    setIsRunning(true);
+    socket.emit('run-code', {
+      sessionId,
+      code,
+      language
+    });
   };
 
   // Show loader until connection is ready
@@ -182,10 +192,12 @@ export default function EditorPage() {
         {userRole === "owner" && (
           <button
             className="end-session-btn"
-            onClick={() => socket.emit("end-session", { 
-              sessionId, 
-              userId: currentUser.uid 
-            })}
+            onClick={() =>
+              socket.emit("end-session", {
+                sessionId,
+                userId: currentUser.uid,
+              })
+            }
           >
             End Session
           </button>
@@ -213,6 +225,25 @@ export default function EditorPage() {
           <option value="java">Java</option>
         </select>
       </div>
+
+      {/* <div className="execution-panel">
+        <CodeRunner
+          code={code}
+          language={language}
+          socket={socket}
+          sessionId={sessionId}
+        />
+      </div> */}
+
+<div className="terminal-wrapper">
+      <button 
+        onClick={handleRun} 
+        disabled={isRunning}
+      >
+        {isRunning ? 'Running...' : '▶ Run Code'}
+      </button>
+      <TerminalUI socket={socket} sessionId={sessionId} />
+    </div>
 
       <Editor
         height="80vh"
