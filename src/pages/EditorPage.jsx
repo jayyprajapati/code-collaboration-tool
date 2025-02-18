@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import Editor from "@monaco-editor/react";
@@ -25,8 +25,67 @@ export default function EditorPage() {
   const [chatMessages, setChatMessages] = useState([]);
   const [copied, setCopied] = useState(false);
   const [isRunning, setIsRunning] = useState(false);
+  const editorRef = useRef(null);
 
   const sessionPassword = location.state?.sessionPassword;
+
+  const LANGUAGE_TEMPLATES = {
+    python: '# New Python Session Started\n\n',
+    javascript: '// New JavaScript Session Started\n\n',
+    java: `public class code {
+      public static void main(String[] args) {
+          // New Java Session Started. Do not change the template. Start coding from here.
+          \n
+      }
+  }\n`
+  };
+
+  const handleLanguageChange = (newLang) => {
+    // Save current code if user wants to keep it
+    if (code !== LANGUAGE_TEMPLATES[language] && code !== '') {
+      const keepCode = confirm('Changing language will reset the editor. Continue?');
+      if (!keepCode) return;
+    }
+    
+    setLanguage(newLang);
+    setCode(LANGUAGE_TEMPLATES[newLang]);
+  };
+
+  // Configure editor options
+  const editorOptions = {
+    readOnly: userRole === "viewer",
+    minimap: { enabled: false },
+    scrollBeyondLastLine: false,
+    automaticLayout: true,
+    cursorPosition: language === 'java' ? { lineNumber: 4, column: 8 } : undefined
+  };
+
+  // Editor mount handler
+  const handleEditorMount = (editor, monaco) => {
+    editorRef.current = editor;
+    
+    // Set initial template
+    editor.setValue(LANGUAGE_TEMPLATES[language]);
+    
+    // Java-specific setup
+    if (language === 'java') {
+      const model = editor.getModel();
+      model.updateOptions({ tabSize: 4 });
+      
+      // Lock class definition lines
+      editor.createDecorationsCollection([
+        {
+          range: new monaco.Range(1,1,3,1),
+          options: { 
+            isWholeLine: true,
+            className: 'locked-line',
+            hoverMessage: 'Class structure is fixed'
+          }
+        }
+      ]);
+    }
+  };
+
 
   useEffect(() => {
     if (!socket) return;
@@ -186,7 +245,7 @@ export default function EditorPage() {
     socket?.on('connect', () => console.log('Socket connected!'));
     socket?.on('disconnect', () => console.log('Socket disconnected'));
   }, [socket]);
-  
+
   // Show loader until connection is ready
   if (!isConnected || !currentUser) {
     return <Loader />;
@@ -247,7 +306,7 @@ export default function EditorPage() {
         </div>
         <select
           value={language}
-          onChange={(e) => setLanguage(e.target.value)}
+          onChange={(e) => handleLanguageChange(e.target.value)}
           className="language-selector"
         >
           <option value="javascript">JavaScript</option>
@@ -281,10 +340,8 @@ export default function EditorPage() {
         value={code}
         onChange={handleEditorChange}
         theme="vs-dark"
-        options={{
-          minimap: { enabled: false },
-          readOnly: userRole === "viewer",
-        }}
+        onMount={handleEditorMount}
+        options={editorOptions}
       />
 
       {userRole === "owner" && (

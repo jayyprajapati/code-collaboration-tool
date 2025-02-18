@@ -258,3 +258,9 @@
   margin-bottom: 10px;
   cursor: pointer;
 }
+
+.locked-line {
+  background-color: rgba(255, 255, 255, 0.1);
+  pointer-events: none;
+  color: #666 !important;
+}
