@@ -157,6 +157,36 @@ export default function EditorPage() {
     });
   };
 
+  useEffect(() => {
+    if (!socket) return;
+  
+    // Handle real-time output
+    const outputHandler = (data) => {
+      if (data.sessionId === sessionId) {
+        // Output will be handled by Terminal component
+      }
+    };
+  
+    // Handle execution completion
+    const completeHandler = () => {
+      setIsRunning(false);
+    };
+  
+    socket.on('terminal-output', outputHandler);
+    socket.on('execution-complete', completeHandler);
+  
+    return () => {
+      socket.off('terminal-output', outputHandler);
+      socket.off('execution-complete', completeHandler);
+    };
+  }, [socket, sessionId]);
+
+  useEffect(() => {
+    console.log('Socket connected?', socket?.connected);
+    socket?.on('connect', () => console.log('Socket connected!'));
+    socket?.on('disconnect', () => console.log('Socket disconnected'));
+  }, [socket]);
+  
   // Show loader until connection is ready
   if (!isConnected || !currentUser) {
     return <Loader />;
@@ -242,7 +272,7 @@ export default function EditorPage() {
       >
         {isRunning ? 'Running...' : '▶ Run Code'}
       </button>
-      <TerminalUI socket={socket} sessionId={sessionId} />
+      <TerminalUI socket={socket} sessionId={sessionId} isRunning={isRunning} />
     </div>
 
       <Editor

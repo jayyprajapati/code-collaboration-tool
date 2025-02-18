@@ -4,20 +4,16 @@ import { FitAddon } from 'xterm-addon-fit';
 import PropTypes from "prop-types";
 import 'xterm/css/xterm.css';
 
-export default function TerminalUI({ socket, sessionId }) {
+export default function TerminalUI({ socket, sessionId, isRunning }) {
   const terminalRef = useRef(null);
   const term = useRef();
   const fitAddon = useRef();
 
   useEffect(() => {
     term.current = new Terminal({
-      theme: {
-        background: '#1e1e1e',
-        foreground: '#ffffff',
-        cursor: '#ffffff'
-      },
+      theme: { background: '#1e1e1e', foreground: '#ffffff' },
       fontSize: 14,
-      cursorBlink: true
+      scrollback: 1000
     });
     
     fitAddon.current = new FitAddon();
@@ -26,23 +22,47 @@ export default function TerminalUI({ socket, sessionId }) {
     fitAddon.current.fit();
 
     // Handle incoming output
-    socket.on('terminal-output', (data) => {
-      term.current.write(data);
-    });
-
-    // Send user input
-    term.current.onData((data) => {
-      socket.emit('terminal-input', { 
-        sessionId,
-        input: data 
-      });
-    });
-
-    return () => {
-      term.current.dispose();
-      socket.off('terminal-output');
+    const outputHandler = (data) => {
+      if (data.sessionId === sessionId) {
+        const output = data.output.replace('\n', '\r\n');
+        term.current.write(output);
+      }
     };
-  }, [socket, sessionId]);
+
+    socket.on('terminal-output', outputHandler);
+
+    // Cleanup
+    return () => {
+      socket.off('terminal-output', outputHandler);
+      term.current.dispose();
+    };
+  }, [sessionId, socket]);
+
+  // Clear terminal on new execution
+  useEffect(() => {
+    if (!term.current) return;
+
+    if (isRunning) {
+      term.current.clear();
+      term.current.write('\x1b[32m$ Running code...\x1b[0m\r\n\n');
+    }
+  }, [isRunning]);
+
+  // const outputHandler = useCallback((data) => {
+  //   if (data.sessionId === sessionId) {
+  //     // Convert to CRLF for proper terminal formatting
+  //     const output = data.output.replace('\n', '\r\n');
+  //     term.current.write(output);
+  //   }
+  // }, [sessionId]);
+  
+  // useEffect(() => {
+  //   if (!socket) return;
+    
+  //   socket.on('terminal-output', outputHandler);
+  //   return () => socket.off('terminal-output', outputHandler);
+  // }, [socket, outputHandler]);
+
 
   return <div ref={terminalRef} style={{ height: '400px', width: '100%' }} />;
 }
@@ -50,4 +70,5 @@ export default function TerminalUI({ socket, sessionId }) {
 TerminalUI.propTypes = {
   socket: PropTypes.object.isRequired,
   sessionId: PropTypes.string.isRequired,
+  isRunning: PropTypes.bool.isRequired
 };
