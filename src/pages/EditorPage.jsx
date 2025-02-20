@@ -10,13 +10,20 @@ import RoleManager from "../components/RoleManager";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 // import CodeRunner from "../components/codeRunner";
 import TerminalUI from "../components/TerminalUI";
-import CopyAllIcon from '@mui/icons-material/CopyAll';
-import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
-import ExitToAppIcon from '@mui/icons-material/ExitToApp';
-import Button from '@mui/material/Button';
-import PasswordIcon from '@mui/icons-material/Password';
-import HighlightOffIcon from '@mui/icons-material/HighlightOff';
-
+import CopyAllIcon from "@mui/icons-material/CopyAll";
+import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
+import Button from "@mui/material/Button";
+import PasswordIcon from "@mui/icons-material/Password";
+import HighlightOffIcon from "@mui/icons-material/HighlightOff";
+import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
+import Box from '@mui/material/Box';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import Split from "react-split";
+import IconButton from '@mui/material/IconButton';
 
 export default function EditorPage() {
   const navigate = useNavigate();
@@ -37,23 +44,25 @@ export default function EditorPage() {
   const sessionPassword = location.state?.sessionPassword;
 
   const LANGUAGE_TEMPLATES = {
-    python: '# New Python Session Started\n\n',
-    javascript: '// New JavaScript Session Started\n\n',
+    python: "# New Python Session Started\n\n",
+    javascript: "// New JavaScript Session Started\n\n",
     java: `public class code {
       public static void main(String[] args) {
           // New Java Session Started. Do not change the template. Start coding from here.
           \n
       }
-  }\n`
+  }\n`,
   };
 
   const handleLanguageChange = (newLang) => {
     // Save current code if user wants to keep it
-    if (code !== LANGUAGE_TEMPLATES[language] && code !== '') {
-      const keepCode = confirm('Changing language will reset the editor. Continue?');
+    if (code !== LANGUAGE_TEMPLATES[language] && code !== "") {
+      const keepCode = confirm(
+        "Changing language will reset the editor. Continue?"
+      );
       if (!keepCode) return;
     }
-    
+
     setLanguage(newLang);
     setCode(LANGUAGE_TEMPLATES[newLang]);
   };
@@ -64,35 +73,35 @@ export default function EditorPage() {
     minimap: { enabled: false },
     scrollBeyondLastLine: false,
     automaticLayout: true,
-    cursorPosition: language === 'java' ? { lineNumber: 4, column: 8 } : undefined
+    cursorPosition:
+      language === "java" ? { lineNumber: 4, column: 8 } : undefined,
   };
 
   // Editor mount handler
   const handleEditorMount = (editor, monaco) => {
     editorRef.current = editor;
-    
+
     // Set initial template
     editor.setValue(LANGUAGE_TEMPLATES[language]);
-    
+
     // Java-specific setup
-    if (language === 'java') {
+    if (language === "java") {
       const model = editor.getModel();
       model.updateOptions({ tabSize: 4 });
-      
+
       // Lock class definition lines
       editor.createDecorationsCollection([
         {
-          range: new monaco.Range(1,1,3,1),
-          options: { 
+          range: new monaco.Range(1, 1, 3, 1),
+          options: {
             isWholeLine: true,
-            className: 'locked-line',
-            hoverMessage: 'Class structure is fixed'
-          }
-        }
+            className: "locked-line",
+            hoverMessage: "Class structure is fixed",
+          },
+        },
       ]);
     }
   };
-
 
   useEffect(() => {
     if (!socket) return;
@@ -216,47 +225,80 @@ export default function EditorPage() {
 
   const handleRun = () => {
     setIsRunning(true);
-    socket.emit('run-code', {
+    socket.emit("run-code", {
       sessionId,
       code,
-      language
+      language,
     });
   };
 
   useEffect(() => {
     if (!socket) return;
-  
+
     // Handle real-time output
     const outputHandler = (data) => {
       if (data.sessionId === sessionId) {
         // Output will be handled by Terminal component
       }
     };
-  
+
     // Handle execution completion
     const completeHandler = () => {
       setIsRunning(false);
     };
-  
-    socket.on('terminal-output', outputHandler);
-    socket.on('execution-complete', completeHandler);
-  
+
+    socket.on("terminal-output", outputHandler);
+    socket.on("execution-complete", completeHandler);
+
     return () => {
-      socket.off('terminal-output', outputHandler);
-      socket.off('execution-complete', completeHandler);
+      socket.off("terminal-output", outputHandler);
+      socket.off("execution-complete", completeHandler);
     };
   }, [socket, sessionId]);
 
   useEffect(() => {
-    console.log('Socket connected?', socket?.connected);
-    socket?.on('connect', () => console.log('Socket connected!'));
-    socket?.on('disconnect', () => console.log('Socket disconnected'));
+    console.log("Socket connected?", socket?.connected);
+    socket?.on("connect", () => console.log("Socket connected!"));
+    socket?.on("disconnect", () => console.log("Socket disconnected"));
   }, [socket]);
 
   // Show loader until connection is ready
   if (!isConnected || !currentUser) {
     return <Loader />;
   }
+
+  // function EditorComponent() {
+  //   return (
+  //     <Editor
+  //       width="100%"
+  //       language={language}
+  //       value={code}
+  //       onChange={handleEditorChange}
+  //       theme="vs-dark"
+  //       onMount={handleEditorMount}
+  //       options={editorOptions}
+  //     />
+  //   );
+  // }
+
+  // function TerminalAndChatComponent() {
+  //   return (
+  //     <Split sizes={[50, 50]} direction="vertical">
+  //       <TerminalUI
+  //         socket={socket}
+  //         sessionId={sessionId}
+  //         isRunning={isRunning}
+  //       />
+  //       <Chat
+  //         socket={socket}
+  //         sessionId={sessionId}
+  //         currentUser={currentUser}
+  //         initialMessages={chatMessages}
+  //         onNewMessage={(msg) => setChatMessages((prev) => [...prev, msg])}
+  //       />
+  //     </Split>
+  //   );
+  // }
 
   return (
     <div className="editor-container">
@@ -269,7 +311,7 @@ export default function EditorPage() {
             setTimeout(() => setCopied(false), 2000);
           }}
         >
-          {copied ? <AssignmentTurnedInIcon /> : <CopyAllIcon />}
+          {copied ? <AssignmentTurnedInIcon /> : <IconButton><CopyAllIcon /></IconButton>}
           {/* <button className="copy-btn">
             {copied ? "✓ Copied" : "Copy ID"}
           </button> */}
@@ -281,63 +323,69 @@ export default function EditorPage() {
             setTimeout(() => setCopied(false), 2000);
           }}
         >
-          {copied ? <AssignmentTurnedInIcon /> : <PasswordIcon />}
-          
+          {copied ? <AssignmentTurnedInIcon /> : <IconButton><PasswordIcon /></IconButton>}
+
           {/* <button className="copy-btn">
             {copied ? "✓ Copied" : "Copy pwd"}
           </button> */}
         </CopyToClipboard>
 
         {userRole === "owner" && (
-          // <button
-          //   className="end-session-btn"
-          //   onClick={() =>
-          //     socket.emit("end-session", {
-          //       sessionId,
-          //       userId: currentUser.uid,
-          //     })
-          //   }
-          // >
-          //   End Session
-          // </button>
-          <Button 
-          variant="contained" 
-          endIcon={<HighlightOffIcon />}
-          onClick={() =>
+          <Button
+            variant="contained"
+            endIcon={<HighlightOffIcon />}
+            onClick={() =>
               socket.emit("end-session", {
                 sessionId,
                 userId: currentUser.uid,
               })
             }
           >
-  Dismiss Room
-</Button>
+            Dismiss Room
+          </Button>
         )}
 
-        <Button 
-          variant="contained" 
+        <Button
+          variant="contained"
           endIcon={<ExitToAppIcon />}
           onClick={() => {
             socket.emit("leave-session", sessionId);
             navigate("/dashboard");
           }}
-          >
-  Leave
-</Button>
-        {/* <button
-          className="leave-session-btn"
-          onClick={() => {
-            socket.emit("leave-session", sessionId);
-            navigate("/dashboard");
-          }}
         >
-          Leave Session <ExitToAppIcon/>
-        </button> */}
-        <div className="connection-status">
-          <span className="status-indicator connected"></span>
+          Leave
+        </Button>
+
+        <Button
+          variant="outlined"
+          startIcon={<PlayCircleOutlineIcon />}
+          onClick={handleRun} disabled={isRunning}
+        >
+          {isRunning ? "Running..." : "Run Code"}
+        </Button>
+        {/* <div className="connection-status">
+          
           Live Connection
-        </div>
-        <select
+        </div> */}
+
+<Box sx={{ minWidth: 120 }}>
+      <FormControl fullWidth>
+        <InputLabel id="demo-simple-select-label">Language</InputLabel>
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={language}
+          label="Language"
+          onChange={(e) => handleLanguageChange(e.target.value)}
+        >
+          <MenuItem value='javascript'>Javascript</MenuItem>
+          <MenuItem value='python'>Python</MenuItem>
+          <MenuItem value='java'>Java</MenuItem>
+        </Select>
+      </FormControl>
+    </Box>
+
+        {/* <select
           value={language}
           onChange={(e) => handleLanguageChange(e.target.value)}
           className="language-selector"
@@ -345,7 +393,7 @@ export default function EditorPage() {
           <option value="javascript">JavaScript</option>
           <option value="python">Python</option>
           <option value="java">Java</option>
-        </select>
+        </select> */}
       </div>
 
       {/* <div className="execution-panel">
@@ -357,19 +405,34 @@ export default function EditorPage() {
         />
       </div> */}
 
-<div className="terminal-wrapper">
-      <button 
-        onClick={handleRun} 
-        disabled={isRunning}
+      {/* <Split
+        className="wrap"
+        sizes={[50, 50]}
+        // minSize={100}
+        // expandToMin={false}
+        // gutterSize={10}
+        // gutterAlign="center"
+        // snapOffset={30}
+        // dragInterval={1}
+        direction="horizontal"
       >
-        {isRunning ? 'Running...' : '▶ Run Code'}
-      </button>
-      <TerminalUI socket={socket} sessionId={sessionId} isRunning={isRunning} />
-    </div>
+        <EditorComponent />
+        <TerminalAndChatComponent />
+      </Split> */}
 
-    <div style={{ width: "800px", height: "500px" }}> 
-    <Editor
-        height="100%"
+<div style={{ height: '100vh' }}>
+      <Split
+        sizes={[50, 50]}
+        minSize={100}
+        expandToMin={false}
+        gutterSize={10}
+        gutterAlign="center"
+        direction="horizontal"
+        cursor="col-resize"
+        className="wrap"
+      >
+        <div className="h-full">
+        <Editor
         width="100%"
         language={language}
         value={code}
@@ -378,8 +441,42 @@ export default function EditorPage() {
         onMount={handleEditorMount}
         options={editorOptions}
       />
-    </div>
-      
+        </div>
+
+        <Split
+          sizes={[50, 50]}
+          minSize={[100, 100]}
+          expandToMin={false}
+          gutterSize={10}
+          direction="vertical"
+          cursor="row-resize"
+          className="h-full flex flex-col"
+        >
+          <TerminalUI
+          socket={socket}
+          sessionId={sessionId}
+          isRunning={isRunning}
+        />
+        <Chat
+          socket={socket}
+          sessionId={sessionId}
+          currentUser={currentUser}
+          initialMessages={chatMessages}
+          onNewMessage={(msg) => setChatMessages((prev) => [...prev, msg])}
+        />
+        </Split>
+        </Split>
+        </div>
+
+      {/* <div className="terminal-wrapper">
+        <button >
+          
+        </button>
+      </div> */}
+
+      {/* <div style={{ width: "800px", height: "500px" }}> 
+    
+    </div> */}
 
       {userRole === "owner" && (
         <RoleManager
@@ -393,14 +490,6 @@ export default function EditorPage() {
           }}
         />
       )}
-
-      <Chat
-        socket={socket}
-        sessionId={sessionId}
-        currentUser={currentUser}
-        initialMessages={chatMessages}
-        onNewMessage={(msg) => setChatMessages((prev) => [...prev, msg])}
-      />
     </div>
   );
 }
