@@ -77,14 +77,14 @@
 
 /* Chat Styles */
 .chat-container {
-  position: fixed;
+  /* position: fixed;
   right: 20px;
   bottom: 20px;
-  width: 300px;
+  width: 300px; */
   background: white;
   border: 1px solid #ccc;
   border-radius: 8px;
-  padding: 10px;
+  /* padding: 10px; */
   box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
@@ -293,4 +293,59 @@ nav {
 
 .session-create {
   margin-bottom: 1.5rem;
+}
+
+.wrap {
+  display: flex;
+  height: 100%;
+
+}
+.gutter-horizontal {
+  cursor: ew-resize;
+}
+
+.gutter-vertical {
+  cursor: ns-resize;
+}
+
+.xterm-screen {
+  height: unset !important;
+  width: unset !important;
+}
+
+.terminal.xterm {
+  height: 100% !important;
+}
+
+/* Split.js gutters */
+.gutter {
+  background-color: #2d3748;
+  background-repeat: no-repeat;
+  background-position: 50%;
+  position: relative;
+  z-index: 10;
+}
+
+.gutter.gutter-horizontal {
+  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==');
+  cursor: col-resize;
+}
+
+.gutter.gutter-vertical {
+  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAFAQMAAABo7865AAAABlBMVEVHcEzMzMzyAv2sAAAAAXRSTlMAQObYZgAAABBJREFUeF5jOAMEEAIEEFwAn3kMwcB6I2AAAAAASUVORK5CYII=');
+  cursor: row-resize;
+}
+
+/* Ensure proper height calculation */
+.editor-header {
+  height: 40px;
+  @apply bg-gray-800 flex items-center px-4 border-b border-gray-700;
+}
+
+.language-selector {
+  @apply bg-gray-700 text-white px-3 py-1 rounded mr-4;
+}
+
+.end-session-btn {
+  @apply bg-red-500 hover:bg-red-600 text-white px-4 py-1 rounded ml-auto;
 }
