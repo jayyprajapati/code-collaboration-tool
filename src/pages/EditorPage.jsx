@@ -10,6 +10,13 @@ import RoleManager from "../components/RoleManager";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 // import CodeRunner from "../components/codeRunner";
 import TerminalUI from "../components/TerminalUI";
+import CopyAllIcon from '@mui/icons-material/CopyAll';
+import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import Button from '@mui/material/Button';
+import PasswordIcon from '@mui/icons-material/Password';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+
 
 export default function EditorPage() {
   const navigate = useNavigate();
@@ -262,9 +269,10 @@ export default function EditorPage() {
             setTimeout(() => setCopied(false), 2000);
           }}
         >
-          <button className="copy-btn">
+          {copied ? <AssignmentTurnedInIcon /> : <CopyAllIcon />}
+          {/* <button className="copy-btn">
             {copied ? "✓ Copied" : "Copy ID"}
-          </button>
+          </button> */}
         </CopyToClipboard>
         <CopyToClipboard
           text={sessionPassword}
@@ -273,33 +281,58 @@ export default function EditorPage() {
             setTimeout(() => setCopied(false), 2000);
           }}
         >
-          <button className="copy-btn">
+          {copied ? <AssignmentTurnedInIcon /> : <PasswordIcon />}
+          
+          {/* <button className="copy-btn">
             {copied ? "✓ Copied" : "Copy pwd"}
-          </button>
+          </button> */}
         </CopyToClipboard>
 
         {userRole === "owner" && (
-          <button
-            className="end-session-btn"
-            onClick={() =>
+          // <button
+          //   className="end-session-btn"
+          //   onClick={() =>
+          //     socket.emit("end-session", {
+          //       sessionId,
+          //       userId: currentUser.uid,
+          //     })
+          //   }
+          // >
+          //   End Session
+          // </button>
+          <Button 
+          variant="contained" 
+          endIcon={<HighlightOffIcon />}
+          onClick={() =>
               socket.emit("end-session", {
                 sessionId,
                 userId: currentUser.uid,
               })
             }
           >
-            End Session
-          </button>
+  Dismiss Room
+</Button>
         )}
-        <button
+
+        <Button 
+          variant="contained" 
+          endIcon={<ExitToAppIcon />}
+          onClick={() => {
+            socket.emit("leave-session", sessionId);
+            navigate("/dashboard");
+          }}
+          >
+  Leave
+</Button>
+        {/* <button
           className="leave-session-btn"
           onClick={() => {
             socket.emit("leave-session", sessionId);
             navigate("/dashboard");
           }}
         >
-          Leave Session
-        </button>
+          Leave Session <ExitToAppIcon/>
+        </button> */}
         <div className="connection-status">
           <span className="status-indicator connected"></span>
           Live Connection
@@ -334,8 +367,10 @@ export default function EditorPage() {
       <TerminalUI socket={socket} sessionId={sessionId} isRunning={isRunning} />
     </div>
 
-      <Editor
-        height="80vh"
+    <div style={{ width: "800px", height: "500px" }}> 
+    <Editor
+        height="100%"
+        width="100%"
         language={language}
         value={code}
         onChange={handleEditorChange}
@@ -343,6 +378,8 @@ export default function EditorPage() {
         onMount={handleEditorMount}
         options={editorOptions}
       />
+    </div>
+      
 
       {userRole === "owner" && (
         <RoleManager

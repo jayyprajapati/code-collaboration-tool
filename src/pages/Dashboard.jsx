@@ -5,6 +5,12 @@ import { auth } from "../firebase";
 import { useState } from "react";
 import { generateSessionId, generateStrongPassword } from "../utils/session";
 import { verifySession, createNewSession } from "../api";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+import Divider from "@mui/material/Divider";
+import Chip from "@mui/material/Chip";
 
 export default function Dashboard() {
   const { currentUser } = useAuth();
@@ -19,17 +25,23 @@ export default function Dashboard() {
     const finalPassword = password || generateStrongPassword();
 
     try {
-      const { valid, error } = await createNewSession(newSessionId, finalPassword, currentUser.uid);
+      const { valid, error } = await createNewSession(
+        newSessionId,
+        finalPassword,
+        currentUser.uid
+      );
 
       if (valid) {
-        navigate(`/editor/${newSessionId}`, { 
-          state: { 
+        navigate(`/editor/${newSessionId}`, {
+          state: {
             sessionPassword: finalPassword,
-            isOwner: true
-          } 
+            isOwner: true,
+          },
         });
       } else {
-        alert(error || "Could not start a new session. Please try again later!");
+        alert(
+          error || "Could not start a new session. Please try again later!"
+        );
       }
     } catch (err) {
       console.error(err);
@@ -52,10 +64,10 @@ export default function Dashboard() {
 
       if (valid) {
         navigate(`/editor/${joinData.id}`, {
-          state: { 
+          state: {
             sessionPassword: joinData.pass,
-            isOwner: false
-          } 
+            isOwner: false,
+          },
         });
       } else {
         alert(error || "Invalid session credentials");
@@ -81,50 +93,108 @@ export default function Dashboard() {
       </button>
       <h1>Welcome, {currentUser?.displayName}</h1>
       <div className="session-actions">
-        <div className="dashboard">
+        <div className="">
           <div className="session-create">
-            <h3>Create New Session</h3>
+            <h3>Create New Room</h3>
             <div className="password-options">
-              <label>
-                <input
-                  type="checkbox"
-                  checked={useCustomPass}
-                  onChange={(e) => setUseCustomPass(e.target.checked)}
-                />
-                Use Custom Password
-              </label>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={useCustomPass}
+                    onChange={(e) => setUseCustomPass(e.target.checked)}
+                  />
+                }
+                label="Custom Password"
+              />
 
               {useCustomPass && (
-                <input
-                  type="password"
-                  value={password}
+                <TextField
+                  id="outlined-basic"
+                  label="Set Password"
+                  size="small"
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Enter custom password"
+                  value={password}
+                  variant="outlined"
                 />
               )}
+
+              <Button
+                variant="contained"
+                onClick={handleCreateSession}
+                size="small"
+              >
+                Create Room
+              </Button>
             </div>
-            <button onClick={handleCreateSession}>Create Session</button>
+            {/* <button onClick={handleCreateSession}>Create Session</button> */}
           </div>
 
+          <Divider>
+            <Chip label="OR" size="small" />
+          </Divider>
+
           <div className="session-join">
-            <h3>Join Existing Session</h3>
+            <h3>Join Existing Room</h3>
+
+            <div className="join-session-container">
+              <TextField
+                id="outlined-basic"
+                label="Session ID"
+                size="small"
+                onChange={(e) =>
+                  setJoinData((p) => ({ ...p, id: e.target.value }))
+                }
+                value={joinData.id}
+                variant="outlined"
+              />
+              <TextField
+                id="outlined-basic"
+                label="Password"
+                size="small"
+                onChange={(e) =>
+                  setJoinData((p) => ({ ...p, pass: e.target.value }))
+                }
+                value={joinData.pass}
+                variant="outlined"
+              />
+              <Button
+                variant="outlined"
+                onClick={handleJoinSession}
+                size="small"
+              >
+                Join Room
+              </Button>
+            </div>
+
+            {/* <div className="input-container">
             <input
               type="text"
+              className="input"
               value={joinData.id}
               onChange={(e) =>
                 setJoinData((p) => ({ ...p, id: e.target.value }))
               }
               placeholder="Session ID"
             />
+            <label className="label">Session ID</label>
+            <div className="underline"></div>
+            </div> */}
+
+            {/* <div className="input-container">
             <input
               type="password"
+              className="input"
               value={joinData.pass}
               onChange={(e) =>
                 setJoinData((p) => ({ ...p, pass: e.target.value }))
               }
               placeholder="Session Password"
             />
-            <button onClick={handleJoinSession}>Join Session</button>
+            <label className="label">Password</label>
+            <div className="underline"></div>
+            </div> */}
+
+            {/* <button onClick={handleJoinSession}>Join Session</button> */}
           </div>
         </div>
       </div>

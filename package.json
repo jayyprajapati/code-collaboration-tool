@@ -10,8 +10,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
     "@firebase/auth": "^1.9.0",
     "@monaco-editor/react": "^4.6.0",
+    "@mui/icons-material": "^6.4.5",
+    "@mui/material": "^6.4.5",
+    "@mui/styled-engine-sc": "^6.4.3",
     "@xterm/addon-fit": "^0.10.0",
     "@xterm/addon-webgl": "^0.18.0",
     "firebase": "^11.3.1",
@@ -21,6 +26,7 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^7.1.5",
     "socket.io-client": "^4.8.1",
+    "styled-components": "^6.1.15",
     "xterm": "^5.3.0",
     "xterm-addon-fit": "^0.8.0"
   },

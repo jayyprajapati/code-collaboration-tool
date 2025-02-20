@@ -1,5 +1,6 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 
 export default function RoleManager({ users, onRoleChange }) {
   const [selectedUser, setSelectedUser] = useState("");
@@ -14,7 +15,7 @@ export default function RoleManager({ users, onRoleChange }) {
 
   return (
     <div className="role-manager">
-      <h4>Manage Roles</h4>
+      <h4><ManageAccountsIcon /> Manage Roles</h4>
       <form onSubmit={handleSubmit}>
         <select
           value={selectedUser}

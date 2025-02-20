@@ -4,10 +4,13 @@ import Login from './pages/login';
 import Dashboard from './pages/Dashboard';
 import EditorPage from './pages/EditorPage';
 import ProtectedRoute from './components/ProtectedRoute';
+import Header from './components/Header';
 
 
 function App() {
   return (
+    <>
+    <Header />
     <Router>
     <Routes>
       <Route path="/" element={<Login />} />
@@ -23,6 +26,8 @@ function App() {
         } />
     </Routes>
   </Router>
+    </>
+    
   )
 }
 
