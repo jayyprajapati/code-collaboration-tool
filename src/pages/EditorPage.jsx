@@ -8,32 +8,15 @@ import Loader from "../components/Loader";
 import Chat from "../components/Chat";
 import RoleManager from "../components/RoleManager";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-// import CodeRunner from "../components/codeRunner";
 import TerminalUI from "../components/TerminalUI";
 import CopyAllIcon from "@mui/icons-material/CopyAll";
-// import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import Button from "@mui/material/Button";
-// import PasswordIcon from "@mui/icons-material/Password";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
-// import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
-// import Box from "@mui/material/Box";
-// import InputLabel from "@mui/material/InputLabel";
-// import MenuItem from "@mui/material/MenuItem";
-// import FormControl from "@mui/material/FormControl";
-// import Select from "@mui/material/Select";
 import Split from "react-split";
 import IconButton from "@mui/material/IconButton";
 import Avatar from "@mui/material/Avatar";
 import AvatarGroup from "@mui/material/AvatarGroup";
-// import SpeedDial from "@mui/material/SpeedDial";
-// import SpeedDialIcon from '@mui/material/SpeedDialIcon';
-// import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-// import SpeedDialAction from "@mui/material/SpeedDialAction";
-// import FileCopyIcon from '@mui/icons-material/FileCopyOutlined';
-// import SaveIcon from '@mui/icons-material/Save';
-// import PrintIcon from '@mui/icons-material/Print';
-// import ShareIcon from "@mui/icons-material/Share";
 import KeyIcon from "@mui/icons-material/Key";
 import CodeIcon from "@mui/icons-material/Code";
 import Tooltip from '@mui/material/Tooltip';
@@ -41,12 +24,6 @@ import Zoom from '@mui/material/Zoom';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import CheckIcon from '@mui/icons-material/Check';
 
-// const actions = [
-//   { icon: <ContentCopyIcon />, name: "Copy Session Id" },
-//   { icon: <KeyIcon />, name: "Copy Session Password" },
-//   // { icon: <PrintIcon />, name: 'Print' },
-//   // { icon: <ShareIcon />, name: 'Share' },
-// ];
 
 export default function EditorPage() {
   const navigate = useNavigate();
@@ -167,10 +144,6 @@ export default function EditorPage() {
         setUserRole(role);
         setChatMessages(chat || []); // Initialize chat messages
       });
-
-      // socket.on("user-list", (userList) => {
-      //   setUsers(userList);
-      // });
 
       socket.on("role-updated", ({ user, newRole }) => {
         if (user === currentUser.displayName) {
@@ -300,39 +273,6 @@ export default function EditorPage() {
     return <Loader />;
   }
 
-  // function EditorComponent() {
-  //   return (
-  //     <Editor
-  //       width="100%"
-  //       language={language}
-  //       value={code}
-  //       onChange={handleEditorChange}
-  //       theme="vs-dark"
-  //       onMount={handleEditorMount}
-  //       options={editorOptions}
-  //     />
-  //   );
-  // }
-
-  // function TerminalAndChatComponent() {
-  //   return (
-  //     <Split sizes={[50, 50]} direction="vertical">
-  //       <TerminalUI
-  //         socket={socket}
-  //         sessionId={sessionId}
-  //         isRunning={isRunning}
-  //       />
-  //       <Chat
-  //         socket={socket}
-  //         sessionId={sessionId}
-  //         currentUser={currentUser}
-  //         initialMessages={chatMessages}
-  //         onNewMessage={(msg) => setChatMessages((prev) => [...prev, msg])}
-  //       />
-  //     </Split>
-  //   );
-  // }
-
   return (
     <div className="editor-container">
       <div className="editor-header">
@@ -392,23 +332,6 @@ export default function EditorPage() {
           ))}
         </AvatarGroup>
 
-        {/* <Box sx={{ minWidth: 120 }}>
-          <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label">Language</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={language}
-              label="Language"
-              onChange={(e) => handleLanguageChange(e.target.value)}
-            >
-              <MenuItem value="javascript">Javascript</MenuItem>
-              <MenuItem value="python">Python</MenuItem>
-              <MenuItem value="java">Java</MenuItem>
-            </Select>
-          </FormControl>
-        </Box> */}
-
         {userRole === "owner" ? (
           <Button
             variant="contained"
@@ -434,54 +357,7 @@ export default function EditorPage() {
       >
         Leave
       </Button>}
-
-        
-
-        {/* <Button
-          variant="outlined"
-          startIcon={<PlayCircleOutlineIcon />}
-          onClick={handleRun}
-          disabled={isRunning}
-        >
-          {isRunning ? "Running..." : "Run Code"}
-        </Button> */}
-
-        
-
-        {/* <select
-          value={language}
-          onChange={(e) => handleLanguageChange(e.target.value)}
-          className="language-selector"
-        >
-          <option value="javascript">JavaScript</option>
-          <option value="python">Python</option>
-          <option value="java">Java</option>
-        </select> */}
       </div>
-
-      {/* <div className="execution-panel">
-        <CodeRunner
-          code={code}
-          language={language}
-          socket={socket}
-          sessionId={sessionId}
-        />
-      </div> */}
-
-      {/* <Split
-        className="wrap"
-        sizes={[50, 50]}
-        // minSize={100}
-        // expandToMin={false}
-        // gutterSize={10}
-        // gutterAlign="center"
-        // snapOffset={30}
-        // dragInterval={1}
-        direction="horizontal"
-      >
-        <EditorComponent />
-        <TerminalAndChatComponent />
-      </Split> */}
 
       <div style={{ height: "100vh" }}>
         <Split
@@ -517,7 +393,6 @@ export default function EditorPage() {
                   onClick={handleRun}
                   disabled={isRunning}
                 >
-                  {/* <PlayCircleOutlineIcon /> */}
                   {isRunning ? "Running..." : "Run"}
                 </button>
 
@@ -546,18 +421,11 @@ export default function EditorPage() {
             cursor="row-resize"
             className="h-full flex flex-col"
           >
-
-            {/* <div className="terminal-head">
-              <div className="terminal-title">
-                <CodeIcon /> &nbsp; <span>Terminal</span>
-              </div>
-            </div> */}
             <TerminalUI
               socket={socket}
               sessionId={sessionId}
               isRunning={isRunning}
             />
-
             
             <Chat
               socket={socket}
@@ -569,16 +437,6 @@ export default function EditorPage() {
           </Split>
         </Split>
       </div>
-
-      {/* <div className="terminal-wrapper">
-        <button >
-          
-        </button>
-      </div> */}
-
-      {/* <div style={{ width: "800px", height: "500px" }}> 
-    
-    </div> */}
 
       {userRole === "owner" && (
         <RoleManager
