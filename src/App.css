@@ -51,12 +51,6 @@
   gap: 10px;
 }
 
-/* .join-session input {
-  padding: 10px;
-  font-size: 16px;
-  max-width: 300px;
-} */
-
 .editor-container {
   padding: 20px;
   height: 100vh;
@@ -423,24 +417,10 @@ nav {
   align-items: center;
 }
 
-/* For the container */
-/* .editor-container {
-  border-radius: 10px;
-  overflow: hidden;
-  height: 100%;
-} */
 
-/* For Monaco's internal elements */
 .monaco-editor {
-  /* border-radius: 10px !important; */
   padding-top: 10px;
 }
-
-/* Fix overflow shadows */
-/* .monaco-editor .overflow-guard {
-  border-radius: 10px !important;
-} */
-
 
 
 .session-details{
