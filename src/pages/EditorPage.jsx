@@ -23,6 +23,7 @@ import Tooltip from '@mui/material/Tooltip';
 import Zoom from '@mui/material/Zoom';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import CheckIcon from '@mui/icons-material/Check';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 
 export default function EditorPage() {
@@ -42,6 +43,7 @@ export default function EditorPage() {
   const [isRunning, setIsRunning] = useState(false);
   const editorRef = useRef(null);
   const [isLangSelectDropdownOpen, setIsLangSelectDropdownOpen] = useState(false);
+  const [toggleRoleManagerDropdown, setToggleRoleManagerDropdown] = useState(false);
 
   const sessionPassword = location.state?.sessionPassword;
 
@@ -322,15 +324,34 @@ export default function EditorPage() {
         </CopyToClipboard>
 
         </div>
+          
+        <div className="avatar-role-manager">
+          <AvatarGroup max={4}>
+                    {users.map((user) => (
+                      <Avatar key={user.name} alt={user.name}>
+                        {user.name[0]}
+                      </Avatar>
+                    ))}
+                    {users.length > 0 && userRole === "owner" && <>
+                       <IconButton onClick={() => setToggleRoleManagerDropdown(!toggleRoleManagerDropdown)}>
+                              <MoreVertIcon />
+                            </IconButton>
+                    </>}
+                  </AvatarGroup>
+        {userRole === "owner" && toggleRoleManagerDropdown && (
+        <RoleManager
+          users={users}
+          onRoleChange={(user, role) => {
+            socket.emit("change-role", {
+              sessionId,
+              targetUser: user,
+              newRole: role,
+            });
+          }}
+        />
+      )}
+        </div>
         
-
-        <AvatarGroup max={4}>
-          {users.map((user) => (
-            <Avatar key={user.name} alt={user.name}>
-              {user.name[0]}
-            </Avatar>
-          ))}
-        </AvatarGroup>
 
         {userRole === "owner" ? (
           <Button
@@ -438,18 +459,7 @@ export default function EditorPage() {
         </Split>
       </div>
 
-      {userRole === "owner" && (
-        <RoleManager
-          users={users}
-          onRoleChange={(user, role) => {
-            socket.emit("change-role", {
-              sessionId,
-              targetUser: user,
-              newRole: role,
-            });
-          }}
-        />
-      )}
+      
     </div>
   );
 }
