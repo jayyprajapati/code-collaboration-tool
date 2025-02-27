@@ -85,20 +85,29 @@
   border-radius: 8px;
   /* padding: 10px; */
   box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  position: relative;
+  overflow: auto;
+}
+
+.send-chat-input {
+  position: sticky;
+  /* position: absolute; */
+  bottom: 10px;
+  /* width: 100%; */
+  margin-inline: 10px;
 }
 
 .chat-messages {
-  height: 200px;
+  height: 80%;
   overflow-y: auto;
   margin-bottom: 10px;
 }
 
-.message {
-  margin: 5px 0;
-  padding: 5px;
-  background: #f0f0f0;
-  border-radius: 4px;
+.MuiPaper-elevation {
+  width: unset !important;
+  
 }
+
 
 /* Role Manager */
 .role-manager {
@@ -306,7 +315,7 @@ nav {
 .wrap {
   display: flex;
   height: 100%;
-
+  /* margin-bottom: 2rem; */
 }
 .gutter-horizontal {
   cursor: ew-resize;
@@ -495,4 +504,41 @@ button.lang-select:hover,.lang-select-option:hover {
 
 .lang-select-option svg {
   scale: 0.6;
+}
+
+.user-message {
+  display: flex;
+  justify-content: start;
+  align-items: flex-end;
+  gap: 5px;
+  margin-block: 10px;
+  margin-inline: 5px;
+  /* max-width: 60%; */
+}
+
+/* .message-text {
+
+} */
+.message-sender {
+  justify-content: end;
+  flex-direction: row-reverse;
+  /* background-color: rgba(63, 162, 246, 0.2) !important; */
+}
+.message-sender-name {
+  color: #7f7f7f;
+  font-size: 12px;
+  font-weight: 600;
+  font-style: italic;
+}
+
+.message-content {
+  padding-inline: 10px;
+  padding-block: 3px;
+  /* max-width: 60%; */
+  background-color: #f2f2f2;
+  border-radius: 5px;
+}
+
+.message-sender-content {
+  background-color: rgba(63, 162, 246, 0.2) !important;
 }
