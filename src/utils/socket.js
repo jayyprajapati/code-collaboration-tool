@@ -1,6 +1,6 @@
 import { io } from 'socket.io-client';
 
-const URL = import.meta.env.VITE_WS_URL || 'http://localhost:3001';
+const URL = 'http://localhost:8000';
 let socket;
 
 export const connectSocket = () => {

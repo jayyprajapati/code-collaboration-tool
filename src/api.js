@@ -1,6 +1,6 @@
 export const verifySession = async (sessionId, password) => {
     try {
-      const response = await fetch('http://localhost:3001/api/verify-session', {
+      const response = await fetch('http://localhost:8000/api/codeCollab/verify-session', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ sessionId, password })
@@ -16,7 +16,7 @@ export const verifySession = async (sessionId, password) => {
 
   export const createNewSession = async (sessionId, password, owner) => {
     try {
-        const response = await fetch('http://localhost:3001/api/create-session', {
+        const response = await fetch('http://localhost:8000/api/codeCollab/create-session', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ sessionId, password, owner })
