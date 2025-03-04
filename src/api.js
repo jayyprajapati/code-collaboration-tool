@@ -2,7 +2,7 @@ export const verifySession = async (sessionId, password) => {
     try {
       const response = await fetch('https://api.jayprajapati.me/api/codeCollab/verify-session', {
         method: 'POST',
-        credentials: 'include',
+        // credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ sessionId, password })
       });
