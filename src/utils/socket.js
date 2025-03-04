@@ -1,6 +1,6 @@
 import { io } from 'socket.io-client';
 
-const URL = 'http://localhost:8000';
+const URL = 'https://api.jayprajapati.me';
 let socket;
 
 export const connectSocket = () => {
