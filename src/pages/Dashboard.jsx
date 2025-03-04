@@ -11,6 +11,8 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import Divider from "@mui/material/Divider";
 import Chip from "@mui/material/Chip";
+import Alert from "@mui/material/Alert";
+import AlertTitle from "@mui/material/AlertTitle";
 
 export default function Dashboard() {
   const { currentUser } = useAuth();
@@ -19,6 +21,7 @@ export default function Dashboard() {
   const [password, setPassword] = useState("");
   const [useCustomPass, setUseCustomPass] = useState(false);
   const [joinData, setJoinData] = useState({ id: "", pass: "" });
+  const [alert, setAlert] = useState(null);
 
   const handleCreateSession = async () => {
     const newSessionId = generateSessionId();
@@ -39,13 +42,27 @@ export default function Dashboard() {
           },
         });
       } else {
-        alert(
-          error || "Could not start a new session. Please try again later!"
-        );
+        setAlert({
+          severity: 'warning',
+          title: 'Warning',
+          message: `${error || 'Please enter both session ID and password'}`
+        })
+        // <Alert severity="error">
+        //   <AlertTitle>Error</AlertTitle>
+        //   {error || "Could not start a new session. Please try again later!"}
+        // </Alert>;
       }
     } catch (err) {
       console.error(err);
-      alert("Failed to verify session. Please try again.");
+      setAlert({
+        severity: 'warning',
+          title: 'Warning',
+          message: 'Failed to verify session. Please try again.'
+      })
+      // <Alert severity="error">
+      //   <AlertTitle>Error</AlertTitle>
+      //   Failed to verify session. Please try again.
+      // </Alert>;
     }
 
     // if (response.ok) {
@@ -55,7 +72,15 @@ export default function Dashboard() {
 
   const handleJoinSession = async () => {
     if (!joinData.id || !joinData.pass) {
-      alert("Please enter both session ID and password");
+      setAlert({
+        severity: 'warning',
+        title: 'Warning',
+        message: 'Please enter both session ID and password'
+      })
+      // <Alert severity="warning">
+      //   <AlertTitle>Warning</AlertTitle>
+      //   Please enter both session ID and password
+      // </Alert>;
       return;
     }
 
@@ -70,11 +95,27 @@ export default function Dashboard() {
           },
         });
       } else {
-        alert(error || "Invalid session credentials");
+        setAlert({
+          severity: 'warning',
+          title: 'Warning',
+          message: `${error || 'Invalid session credentials'}`
+        })
+        // <Alert severity="error">
+        //   <AlertTitle>Error</AlertTitle>
+        //   {error || "Invalid session credentials"}
+        // </Alert>;
       }
     } catch (err) {
       console.error(err);
-      alert("Failed to verify session. Please try again.");
+      setAlert({
+        severity: 'warning',
+        title: 'Warning',
+        message: 'Failed to verify session. Please try again.'
+      })
+      // <Alert severity="error">
+      //   <AlertTitle>Error</AlertTitle>
+      //   Failed to verify session. Please try again.
+      // </Alert>;
     }
   };
 
@@ -91,6 +132,16 @@ export default function Dashboard() {
       <button onClick={handleLogout} className="logout-button">
         Log Out
       </button>
+      {alert && (
+        <Alert 
+          severity={alert.severity} 
+          onClose={() => setAlert(null)}
+          sx={{ mb: 2 }}
+        >
+          <AlertTitle>{alert.title}</AlertTitle>
+          {alert.message}
+        </Alert>
+      )}
       <h1>Welcome, {currentUser?.displayName}</h1>
       <div className="session-actions">
         <div className="">
