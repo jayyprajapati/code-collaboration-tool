@@ -1,5 +1,5 @@
 import { signInWithPopup } from "firebase/auth";
-import { auth, googleProvider, githubProvider } from "../firebase";
+import { auth, googleProvider } from "../firebase";
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
@@ -22,21 +22,21 @@ export default function Login() {
         }
     }
     
-    const handleGithubLogin = async () => {
-        try {
-          await signInWithPopup(auth, githubProvider);
-        } catch (err) {
-          console.error(err);
-        }
-      };
+    // const handleGithubLogin = async () => {
+    //     try {
+    //       await signInWithPopup(auth, githubProvider);
+    //     } catch (err) {
+    //       console.error(err);
+    //     }
+    //   };
 
     return (
       <div className="login-container">
         <h1>Code Collaboration Tool</h1>
         <div className="auth-buttons">
-          <button className="github-auth" onClick={handleGithubLogin}>
+          {/* <button className="github-auth" onClick={handleGithubLogin}>
             Login with GitHub
-          </button>
+          </button> */}
           <button className="google-auth" onClick={handleGoogleLogin}>
             Login with Google
           </button>
