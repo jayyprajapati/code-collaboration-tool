@@ -2,6 +2,7 @@ export const verifySession = async (sessionId, password) => {
     try {
       const response = await fetch('https://api.jayprajapati.me/api/codeCollab/verify-session', {
         method: 'POST',
+        mode: "cors",
         // credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ sessionId, password })
@@ -19,7 +20,8 @@ export const verifySession = async (sessionId, password) => {
     try {
         const response = await fetch('https://api.jayprajapati.me/api/codeCollab/create-session', {
             method: 'POST',
-            credentials: 'include',
+            mode: "cors",
+            // credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ sessionId, password, owner })
         });
