@@ -6,6 +6,7 @@ let socket;
 export const connectSocket = () => {
   socket = io(URL, {
     withCredentials: true,
+    transports: ["websocket", "polling"],
     autoConnect: false
   });
   return socket;
