@@ -1,6 +1,6 @@
 export const verifySession = async (sessionId, password) => {
     try {
-      const response = await fetch('https://api.jayprajapati.me/api/codeCollab/verify-session', {
+      const response = await fetch(import.meta.env.VITE_WEBSOCKET_URL + '/api/validateSession/verify-session', {
         method: 'POST',
         mode: "cors",
         // credentials: 'include',
@@ -18,7 +18,7 @@ export const verifySession = async (sessionId, password) => {
 
   export const createNewSession = async (sessionId, password, owner) => {
     try {
-        const response = await fetch('https://api.jayprajapati.me/api/codeCollab/create-session', {
+        const response = await fetch(import.meta.env.VITE_WEBSOCKET_URL + '/api/validateSession/create-session', {
             method: 'POST',
             mode: "cors",
             // credentials: 'include',

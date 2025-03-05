@@ -1,12 +1,12 @@
 import { io } from 'socket.io-client';
 
-const URL = 'https://api.jayprajapati.me';
+const URL = import.meta.env.VITE_WEBSOCKET_URL;
 let socket;
 
 export const connectSocket = () => {
   socket = io(URL, {
     withCredentials: true,
-    transports: ["websocket", "polling"],
+    transports: ["websocket"],
     autoConnect: false
   });
   return socket;
