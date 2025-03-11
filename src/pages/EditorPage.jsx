@@ -58,7 +58,7 @@ export default function EditorPage() {
   }\n`,
   };
 
-  const langOptions = ["javascript", "python", "java"];
+  const langOptions = ["javascript", "python"];
 
   function ConvertTextToTitleCase(text) {
     return text.replace(/\w\S*/g, (txt) =>
