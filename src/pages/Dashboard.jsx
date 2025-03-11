@@ -1,7 +1,7 @@
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
-import { signOut } from "firebase/auth";
-import { auth } from "../firebase";
+// import { signOut } from "firebase/auth";
+// import { auth } from "../firebase";
 import { useState } from "react";
 import { generateSessionId, generateStrongPassword } from "../utils/session";
 import { verifySession, createNewSession } from "../api";
@@ -119,19 +119,19 @@ export default function Dashboard() {
     }
   };
 
-  const handleLogout = async () => {
-    try {
-      await signOut(auth);
-    } catch (err) {
-      console.error(err);
-    }
-  };
+  // const handleLogout = async () => {
+  //   try {
+  //     await signOut(auth);
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // };
 
   return (
     <div className="dashboard">
-      <button onClick={handleLogout} className="logout-button">
+      {/* <button onClick={handleLogout} className="logout-button">
         Log Out
-      </button>
+      </button> */}
       {alert && (
         <Alert 
           severity={alert.severity} 

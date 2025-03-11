@@ -292,9 +292,19 @@ nav {
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   margin: 15px;
   display: flex;
-  justify-content: start;
+  justify-content: space-between;
   align-items: center;
-  padding-inline: 10px;
+  padding-inline: 24px;
+}
+
+.logout-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 600;
+  /* gap: 8px; */
+  color: #ef233c;
 }
 
 .join-session-container {
