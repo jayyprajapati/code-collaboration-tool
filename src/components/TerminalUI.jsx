@@ -21,6 +21,12 @@ export default function TerminalUI({ socket, sessionId, isRunning }) {
     term.current.open(terminalRef.current);
     fitAddon.current.fit();
 
+    const handleResize = () => {
+      fitAddon.current.fit();
+    };
+
+    window.addEventListener('resize', handleResize);
+
     // Handle incoming output
     const outputHandler = (data) => {
       if (data.sessionId === sessionId) {
@@ -34,6 +40,7 @@ export default function TerminalUI({ socket, sessionId, isRunning }) {
     // Cleanup
     return () => {
       socket.off('terminal-output', outputHandler);
+      window.removeEventListener('resize', handleResize);
       term.current.dispose();
     };
   }, [sessionId, socket]);

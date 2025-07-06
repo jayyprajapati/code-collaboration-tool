@@ -7,20 +7,14 @@ import IconButton from '@mui/material/IconButton';
 import SendIcon from '@mui/icons-material/Send';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
-export default function Chat({ socket, sessionId, currentUser, initialMessages, onNewMessage }) {
+export default function Chat({ socket, sessionId, currentUser, messages, onNewMessage }) {
   const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState([]);
-
-  useEffect(() => {
-    setMessages(initialMessages);
-  }, [initialMessages]);
 
   useEffect(() => {
     if (!socket) return;
 
     const handleNewMessage = (msg) => {
         setMessages(prev => [...prev, msg]);
-        onNewMessage(msg); // Update parent state
       };
 
     socket.on("chat-message", handleNewMessage);
@@ -39,6 +33,7 @@ export default function Chat({ socket, sessionId, currentUser, initialMessages, 
         userId: currentUser.uid,
         userName: currentUser.displayName,
       });
+      onNewMessage({ type: "user", message: message.trim(), user: currentUser.displayName });
       setMessage("");
     }
   };
@@ -113,6 +108,6 @@ Chat.propTypes = {
   socket: PropTypes.object.isRequired,
   sessionId: PropTypes.string.isRequired,
   currentUser: PropTypes.object.isRequired,
-  initialMessages: PropTypes.array,
+  messages: PropTypes.array.isRequired,
   onNewMessage: PropTypes.func.isRequired
 };

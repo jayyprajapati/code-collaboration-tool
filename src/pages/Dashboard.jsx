@@ -1,7 +1,5 @@
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
-// import { signOut } from "firebase/auth";
-// import { auth } from "../firebase";
 import { useState } from "react";
 import { generateSessionId, generateStrongPassword } from "../utils/session";
 import { verifySession, createNewSession } from "../api";
@@ -13,19 +11,26 @@ import Divider from "@mui/material/Divider";
 import Chip from "@mui/material/Chip";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
+import CircularProgress from "@mui/material/CircularProgress";
 
 export default function Dashboard() {
   const { currentUser } = useAuth();
   const navigate = useNavigate();
-  // const [sessionId, setSessionId] = useState("");
-  const [password, setPassword] = useState("");
-  const [useCustomPass, setUseCustomPass] = useState(false);
+  const [creatingRoom, setCreatingRoom] = useState(false);
+  const [joiningRoom, setJoiningRoom] = useState(false);
+  const [createSessionConfig, setCreateSessionConfig] = useState({
+    useCustomPass: false,
+    password: "",
+  });
   const [joinData, setJoinData] = useState({ id: "", pass: "" });
   const [alert, setAlert] = useState(null);
 
   const handleCreateSession = async () => {
+    setCreatingRoom(true);
     const newSessionId = generateSessionId();
-    const finalPassword = password || generateStrongPassword();
+    const finalPassword = createSessionConfig.useCustomPass
+      ? createSessionConfig.password
+      : generateStrongPassword();
 
     try {
       const { valid, error } = await createNewSession(
@@ -43,46 +48,34 @@ export default function Dashboard() {
         });
       } else {
         setAlert({
-          severity: 'warning',
-          title: 'Warning',
-          message: `${error || 'Please enter both session ID and password'}`
-        })
-        // <Alert severity="error">
-        //   <AlertTitle>Error</AlertTitle>
-        //   {error || "Could not start a new session. Please try again later!"}
-        // </Alert>;
+          severity: "warning",
+          title: "Warning",
+          message: error || "Could not start a new session. Please try again later!",
+        });
       }
     } catch (err) {
       console.error(err);
       setAlert({
-        severity: 'warning',
-          title: 'Warning',
-          message: 'Failed to verify session. Please try again.'
-      })
-      // <Alert severity="error">
-      //   <AlertTitle>Error</AlertTitle>
-      //   Failed to verify session. Please try again.
-      // </Alert>;
+        severity: "error",
+        title: "Error",
+        message: "Failed to create session. Please try again.",
+      });
+    } finally {
+      setCreatingRoom(false);
     }
-
-    // if (response.ok) {
-    //   navigate(`/editor/${newSessionId}`);
-    // }
   };
 
   const handleJoinSession = async () => {
     if (!joinData.id || !joinData.pass) {
       setAlert({
-        severity: 'warning',
-        title: 'Warning',
-        message: 'Please enter both session ID and password'
-      })
-      // <Alert severity="warning">
-      //   <AlertTitle>Warning</AlertTitle>
-      //   Please enter both session ID and password
-      // </Alert>;
+        severity: "warning",
+        title: "Warning",
+        message: "Please enter both session ID and password",
+      });
       return;
     }
+
+    setJoiningRoom(true);
 
     try {
       const { valid, error } = await verifySession(joinData.id, joinData.pass);
@@ -96,45 +89,28 @@ export default function Dashboard() {
         });
       } else {
         setAlert({
-          severity: 'warning',
-          title: 'Warning',
-          message: `${error || 'Invalid session credentials'}`
-        })
-        // <Alert severity="error">
-        //   <AlertTitle>Error</AlertTitle>
-        //   {error || "Invalid session credentials"}
-        // </Alert>;
+          severity: "warning",
+          title: "Warning",
+          message: error || "Invalid session credentials",
+        });
       }
     } catch (err) {
       console.error(err);
       setAlert({
-        severity: 'warning',
-        title: 'Warning',
-        message: 'Failed to verify session. Please try again.'
-      })
-      // <Alert severity="error">
-      //   <AlertTitle>Error</AlertTitle>
-      //   Failed to verify session. Please try again.
-      // </Alert>;
+        severity: "error",
+        title: "Error",
+        message: "Failed to verify session. Please try again.",
+      });
+    } finally {
+      setJoiningRoom(false);
     }
   };
 
-  // const handleLogout = async () => {
-  //   try {
-  //     await signOut(auth);
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  // };
-
   return (
     <div className="dashboard">
-      {/* <button onClick={handleLogout} className="logout-button">
-        Log Out
-      </button> */}
       {alert && (
-        <Alert 
-          severity={alert.severity} 
+        <Alert
+          severity={alert.severity}
           onClose={() => setAlert(null)}
           sx={{ mb: 2 }}
         >
@@ -151,21 +127,33 @@ export default function Dashboard() {
               <FormControlLabel
                 control={
                   <Checkbox
-                    checked={useCustomPass}
-                    onChange={(e) => setUseCustomPass(e.target.checked)}
+                    checked={createSessionConfig.useCustomPass}
+                    onChange={(e) =>
+                      setCreateSessionConfig((prev) => ({
+                        ...prev,
+                        useCustomPass: e.target.checked,
+                      }))
+                    }
+                    disabled={creatingRoom}
                   />
                 }
                 label="Custom Password"
               />
 
-              {useCustomPass && (
+              {createSessionConfig.useCustomPass && (
                 <TextField
                   id="outlined-basic"
                   label="Set Password"
                   size="small"
-                  onChange={(e) => setPassword(e.target.value)}
-                  value={password}
+                  onChange={(e) =>
+                    setCreateSessionConfig((prev) => ({
+                      ...prev,
+                      password: e.target.value,
+                    }))
+                  }
+                  value={createSessionConfig.password}
                   variant="outlined"
+                  disabled={creatingRoom}
                 />
               )}
 
@@ -173,11 +161,12 @@ export default function Dashboard() {
                 variant="contained"
                 onClick={handleCreateSession}
                 size="small"
+                disabled={creatingRoom}
+                startIcon={creatingRoom ? <CircularProgress size={20} /> : null}
               >
-                Create Room
+                {creatingRoom ? "Creating..." : "Create Room"}
               </Button>
             </div>
-            {/* <button onClick={handleCreateSession}>Create Session</button> */}
           </div>
 
           <Divider>
@@ -197,6 +186,7 @@ export default function Dashboard() {
                 }
                 value={joinData.id}
                 variant="outlined"
+                disabled={joiningRoom}
               />
               <TextField
                 id="outlined-basic"
@@ -207,48 +197,22 @@ export default function Dashboard() {
                 }
                 value={joinData.pass}
                 variant="outlined"
+                disabled={joiningRoom}
               />
               <Button
                 variant="outlined"
                 onClick={handleJoinSession}
                 size="small"
+                disabled={joiningRoom}
+                startIcon={joiningRoom ? <CircularProgress size={20} /> : null}
               >
-                Join Room
+                {joiningRoom ? "Joining..." : "Join Room"}
               </Button>
             </div>
-
-            {/* <div className="input-container">
-            <input
-              type="text"
-              className="input"
-              value={joinData.id}
-              onChange={(e) =>
-                setJoinData((p) => ({ ...p, id: e.target.value }))
-              }
-              placeholder="Session ID"
-            />
-            <label className="label">Session ID</label>
-            <div className="underline"></div>
-            </div> */}
-
-            {/* <div className="input-container">
-            <input
-              type="password"
-              className="input"
-              value={joinData.pass}
-              onChange={(e) =>
-                setJoinData((p) => ({ ...p, pass: e.target.value }))
-              }
-              placeholder="Session Password"
-            />
-            <label className="label">Password</label>
-            <div className="underline"></div>
-            </div> */}
-
-            {/* <button onClick={handleJoinSession}>Join Session</button> */}
           </div>
         </div>
       </div>
     </div>
   );
 }
+
