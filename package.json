@@ -10,13 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@emotion/react": "^11.14.0",
-    "@emotion/styled": "^11.14.0",
     "@firebase/auth": "^1.9.0",
     "@monaco-editor/react": "^4.6.0",
-    "@mui/icons-material": "^6.4.5",
-    "@mui/material": "^6.4.5",
-    "@mui/styled-engine-sc": "^6.4.3",
     "@xterm/addon-fit": "^0.10.0",
     "@xterm/addon-webgl": "^0.18.0",
     "axios": "^1.8.1",

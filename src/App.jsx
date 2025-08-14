@@ -9,25 +9,22 @@ import Header from './components/Header';
 
 function App() {
   return (
-    <>
-    <Header />
     <Router>
-    <Routes>
-      <Route path="/" element={<Login />} />
-      <Route path="/dashboard" element={
-        <ProtectedRoute>
-          <Dashboard />
-        </ProtectedRoute>
-        } />
-      <Route path="/editor/:sessionId" element={
-        <ProtectedRoute>
-          <EditorPage />
-        </ProtectedRoute>
-        } />
-    </Routes>
-  </Router>
-    </>
-    
+      <Header />
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/dashboard" element={
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+          } />
+        <Route path="/editor/:sessionId" element={
+          <ProtectedRoute>
+            <EditorPage />
+          </ProtectedRoute>
+          } />
+      </Routes>
+    </Router>
   )
 }
 
