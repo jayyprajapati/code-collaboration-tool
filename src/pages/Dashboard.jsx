@@ -7,6 +7,7 @@ import Button from '../components/Button';
 import Input from '../components/Input';
 import Checkbox from '../components/Checkbox';
 import codeImage from '../assets/codeImage.png';
+import { CirclePlus, MoveRight } from 'lucide-react'
 
 export default function Dashboard() {
   const { currentUser } = useAuth();
@@ -156,10 +157,10 @@ export default function Dashboard() {
           <AlertMessage alert={alert} onClose={() => setAlert(null)} />
           
           <div className="dashboard-header">
-            <h1 className="welcome-title">
-              Welcome back,
-              <span className="user-name">{currentUser?.displayName?.split(' ')[0] || 'Developer'}!</span>
-            </h1>
+            <h4 className="welcome-title">
+              Welcome back, &nbsp;
+              <span className="user-name name-dashboard">{currentUser?.displayName?.split(' ')[0] || 'Developer'}!</span>
+            </h4>
             <p className="dashboard-subtitle">
               Ready to collaborate? Choose an option below to get started.
             </p>
@@ -168,7 +169,7 @@ export default function Dashboard() {
           <div className="room-actions">
             <div className="action-card create-card">
               <div className="card-header">
-                <div className="card-icon create-icon">+</div>
+                <div className="card-icon create-icon"><CirclePlus /></div>
                 <div className="card-title">
                   <h3>Create New Room</h3>
                   <p>Start a new collaborative session</p>
@@ -222,7 +223,7 @@ export default function Dashboard() {
 
             <div className="action-card join-card">
               <div className="card-header">
-                <div className="card-icon join-icon">→</div>
+                <div className="card-icon join-icon"><MoveRight /></div>
                 <div className="card-title">
                   <h3>Join Existing Room</h3>
                   <p>Connect to an ongoing session</p>

@@ -9,6 +9,7 @@ import Chat from "../components/Chat";
 import RoleManager from "../components/RoleManager";
 import TerminalUI from "../components/TerminalUI";
 import { CopyToClipboard } from "react-copy-to-clipboard";
+import {Check, Clipboard, Key, EllipsisVertical} from 'lucide-react'
 
 import Button from '../components/Button';
 
@@ -220,12 +221,12 @@ export default function EditorPage() {
           <h2>{sessionId}</h2>
           <CopyToClipboard text={sessionId} onCopy={() => handleCopy("copiedSessionId")}>
             <button title="Copy Session ID" className="copy-btn">
-              {uiState.copiedSessionId ? '✓' : '📋'}
+              {uiState.copiedSessionId ? <Check /> : <Clipboard />}
             </button>
           </CopyToClipboard>
           <CopyToClipboard text={sessionPassword} onCopy={() => handleCopy("copiedPass")}>
             <button title="Copy Password" className="copy-btn">
-              {uiState.copiedPass ? '✓' : '🔑'}
+              {uiState.copiedPass ? <Check /> : <Key />}
             </button>
           </CopyToClipboard>
         </div>
@@ -248,7 +249,7 @@ export default function EditorPage() {
                 }
                 title="Manage Users"
               >
-                ⋮
+                <EllipsisVertical />
               </button>
             )}
           </div>
@@ -302,7 +303,7 @@ export default function EditorPage() {
           <div className="h-full">
             <div className="editor-head">
               <div className="editor-title">
-                <span style={{fontSize: '1.2em'}}>💻</span> &nbsp; <span>Editor</span>
+                 <span>Editor</span>
               </div>
               <div className="editor-file-name">
                 Code.{language === "javascript" ? "js" : language === "python" ? "py" : "java"}

@@ -8,8 +8,8 @@ export default function Chat({ socket, sessionId, currentUser, messages, onNewMe
     if (!socket) return;
 
     const handleNewMessage = (msg) => {
-        setMessage(prev => [...prev, msg]);
-      };
+      onNewMessage(msg);
+    };
 
     socket.on("chat-message", handleNewMessage);
 

@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import Button from '../components/Button';
 import codeImage from '../assets/codeImage.png';
+import { Users, MessageSquareDot, SquareTerminal, FileJson2 } from 'lucide-react';
 
 export default function Login() {
   const { currentUser } = useAuth();
@@ -45,11 +46,11 @@ export default function Login() {
             <div className="floating-elements">
               <div className="code-snippet snippet-1">
                 <span className="code-line">function collaborate() {'{'}</span>
-                <span className="code-line">  return '♨️ + 🚀';</span>
+                <span className="code-line">  return &apos;♨️ + 🚀&apos;;</span>
                 <span className="code-line">{'}'}</span>
               </div>
               <div className="code-snippet snippet-2">
-                <span className="code-line">const magic = await '✨';</span>
+                <span className="code-line">const magic = await &apos;✨&apos;;</span>
               </div>
             </div>
           </div>
@@ -60,7 +61,7 @@ export default function Login() {
           <div className="login-header">
             <h1 className="app-title">
               <span className="title-gradient">Code</span>
-              <span className="title-accent">Collab</span>
+              <span className="title-accent">Hive</span>
             </h1>
             <p className="app-subtitle">
               Real-time collaborative coding made simple
@@ -69,31 +70,27 @@ export default function Login() {
 
           <div className="features-list">
             <div className="feature-item">
-              <div className="feature-icon">⚡</div>
+              <div className="feature-icon"><Users /></div>
               <div className="feature-text">
                 <h3>Real-time Collaboration</h3>
-                <p>Code together in real-time with your team</p>
               </div>
             </div>
             <div className="feature-item">
-              <div className="feature-icon">💬</div>
+              <div className="feature-icon"><MessageSquareDot /></div>
               <div className="feature-text">
                 <h3>Integrated Chat</h3>
-                <p>Communicate seamlessly while coding</p>
               </div>
             </div>
             <div className="feature-item">
-              <div className="feature-icon">🖥️</div>
+              <div className="feature-icon"><SquareTerminal /></div>
               <div className="feature-text">
                 <h3>Shared Terminal</h3>
-                <p>Execute commands together in sync</p>
               </div>
             </div>
             <div className="feature-item">
-              <div className="feature-icon">🌐</div>
+              <div className="feature-icon"><FileJson2 /></div>
               <div className="feature-text">
                 <h3>Multi-language Support</h3>
-                <p>Work with any programming language</p>
               </div>
             </div>
           </div>
