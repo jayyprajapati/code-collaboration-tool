@@ -46,9 +46,9 @@ export default function Header() {
           <div className="logo">
             <span className="logo-text">
               <span className="logo-gradient">Code</span>
-              <span className="logo-accent">Collab</span>
+              <span className="logo-accent">Hive</span>
             </span>
-            <div className="logo-badge">BETA</div>
+            {/* <div className="logo-badge">BETA</div> */}
           </div>
         </div>
         
