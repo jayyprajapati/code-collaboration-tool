@@ -15,8 +15,8 @@
 }
 
 .custom-input--focused {
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: #4a90e2;
+  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
 }
 
 .custom-input--error {
@@ -80,7 +80,7 @@
   font-weight: 500;
   pointer-events: none;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  background: rgba(38, 38, 44, 0.8);
+  background: rgba(26, 26, 26, 0.8);
   padding: 0 0.5rem;
   border-radius: 4px;
 }
@@ -108,7 +108,7 @@
   top: 0;
   transform: translateY(-50%);
   font-size: 0.875rem !important;
-  color: #667eea;
+  color: #4a90e2;
 }
 
 .custom-input--error .custom-input__label--floating {

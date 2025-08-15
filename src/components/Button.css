@@ -19,24 +19,24 @@
 
 /* Button Variants */
 .custom-btn--primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #4a90e2 0%, #2c5282 100%);
   color: white;
-  box-shadow: 0 4px 15px 0 rgba(102, 126, 234, 0.4);
+  box-shadow: 0 4px 15px 0 rgba(74, 144, 226, 0.4);
 }
 
 .custom-btn--primary:hover:not(.custom-btn--disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px 0 rgba(102, 126, 234, 0.6);
+  box-shadow: 0 8px 25px 0 rgba(74, 144, 226, 0.6);
 }
 
 .custom-btn--secondary {
   background: transparent;
-  color: #667eea;
-  border: 2px solid #667eea;
+  color: #4a90e2;
+  border: 2px solid #4a90e2;
 }
 
 .custom-btn--secondary:hover:not(.custom-btn--disabled) {
-  background: #667eea;
+  background: #4a90e2;
   color: white;
   transform: translateY(-2px);
 }
@@ -133,7 +133,7 @@
 
 /* Focus styles */
 .custom-btn:focus-visible {
-  outline: 2px solid #667eea;
+  outline: 2px solid #4a90e2;
   outline-offset: 2px;
 }
 

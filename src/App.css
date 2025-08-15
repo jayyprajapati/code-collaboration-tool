@@ -8,7 +8,7 @@
 
 .login-left {
   position: relative;
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+  background: linear-gradient(135deg, rgba(74, 144, 226, 0.08) 0%, rgba(44, 82, 130, 0.08) 100%);
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -43,7 +43,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(45deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2));
+  background: linear-gradient(45deg, rgba(74, 144, 226, 0.15), rgba(44, 82, 130, 0.15));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -188,7 +188,7 @@
 .feature-item:hover {
   background: rgba(255, 255, 255, 0.05);
   transform: translateY(-2px);
-  border-color: rgba(102, 126, 234, 0.3);
+  border-color: rgba(74, 144, 226, 0.3);
 }
 
 .feature-icon {
@@ -199,7 +199,7 @@
   width: 48px;
   height: 48px;
   border-radius: 12px;
-  background: rgba(102, 126, 234, 0.1);
+  background: rgba(74, 144, 226, 0.15);
   flex-shrink: 0;
 }
 
@@ -310,7 +310,7 @@
 
 .dashboard-left {
   position: relative;
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.08) 0%, rgba(118, 75, 162, 0.08) 100%);
+  background: linear-gradient(135deg, rgba(74, 144, 226, 0.08) 0%, rgba(44, 82, 130, 0.08) 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -333,7 +333,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(45deg, rgba(102, 126, 234, 0.15), rgba(118, 75, 162, 0.15));
+  background: linear-gradient(45deg, rgba(74, 144, 226, 0.15), rgba(44, 82, 130, 0.15));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -374,7 +374,7 @@
   justify-content: center;
   width: 60px;
   height: 60px;
-  background: rgba(102, 126, 234, 0.2);
+  background: rgba(74, 144, 226, 0.2);
   border-radius: 12px;
   flex-shrink: 0;
 }
@@ -463,7 +463,7 @@
 
 .action-card:hover {
   background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(102, 126, 234, 0.3);
+  border-color: rgba(74, 144, 226, 0.3);
   transform: translateY(-4px);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
 }
@@ -493,7 +493,7 @@
 }
 
 .join-icon {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #4a90e2 0%, #2c5282 100%);
   color: white;
 }
 
@@ -976,10 +976,10 @@
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(38, 38, 44, 0.95);
+  background: rgba(26, 26, 26, 0.95);
   backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
 }
 
 .header-container {
@@ -1068,7 +1068,7 @@
 
 .user-info:hover {
   background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(102, 126, 234, 0.3);
+  border-color: rgba(74, 144, 226, 0.3);
 }
 
 .user-avatar {
@@ -1076,7 +1076,7 @@
   height: 36px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid rgba(102, 126, 234, 0.5);
+  border: 2px solid rgba(74, 144, 226, 0.5);
 }
 
 .user-details {
@@ -1396,7 +1396,7 @@ button.lang-select:hover,.lang-select-option:hover {
 }
 
 .message-sender-content {
-  background-color: rgba(63, 162, 246, 0.2) !important;
+  background-color: rgba(74, 144, 226, 0.2) !important;
 }
 
 .manage-user-name-role {
@@ -1431,7 +1431,7 @@ button.lang-select:hover,.lang-select-option:hover {
 }
 
 .manage-user-role-update-btn:hover {
-  background-color: rgba(63, 162, 246, 0.2);
+  background-color: rgba(74, 144, 226, 0.2);
 }
 
 .role-manager-title {
