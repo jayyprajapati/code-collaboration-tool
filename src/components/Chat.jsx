@@ -1,11 +1,5 @@
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import Paper from '@mui/material/Paper';
-import InputBase from '@mui/material/InputBase';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
-import SendIcon from '@mui/icons-material/Send';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 export default function Chat({ socket, sessionId, currentUser, messages, onNewMessage }) {
   const [message, setMessage] = useState("");
@@ -14,8 +8,8 @@ export default function Chat({ socket, sessionId, currentUser, messages, onNewMe
     if (!socket) return;
 
     const handleNewMessage = (msg) => {
-        setMessages(prev => [...prev, msg]);
-      };
+      onNewMessage(msg);
+    };
 
     socket.on("chat-message", handleNewMessage);
 
@@ -54,7 +48,9 @@ export default function Chat({ socket, sessionId, currentUser, messages, onNewMe
               <>
               <div  className={`user-message ${msg.user == currentUser.displayName ? "message-sender" : ""}`}>
                 <div>
-                  <AccountCircleIcon  color="disabled"/>
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" style={{color: '#999'}}>
+                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                  </svg>
                 </div>
               <div className="message-text">
               <div className="message-sender-name">{msg.user}</div>
@@ -71,23 +67,20 @@ export default function Chat({ socket, sessionId, currentUser, messages, onNewMe
       </div>
 
         <div className="send-chat-input">
-          <Paper
-                component="form"
-                onSubmit={sendMessage}
-                sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: 400 }}
-              >
-                <InputBase
-                  sx={{ ml: 1, flex: 1 }}
-                  value={message}
-                  placeholder="Send a message..."
-                  onChange={(e) => setMessage(e.target.value)}
-                  inputProps={{ 'aria-label': 'Send a message' }}
-                />
-                <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
-                <IconButton color="primary" sx={{ p: '10px' }} aria-label="send message" type="submit">
-                  <SendIcon />
-                </IconButton>
-              </Paper>
+          <form onSubmit={sendMessage} className="chat-form">
+            <input
+              type="text"
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              placeholder="Send a message..."
+              className="chat-input"
+            />
+            <button type="submit" className="chat-send-btn">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+              </svg>
+            </button>
+          </form>
         </div>
       
 

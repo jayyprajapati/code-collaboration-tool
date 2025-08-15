@@ -71,7 +71,7 @@ export default function TerminalUI({ socket, sessionId, isRunning }) {
   // }, [socket, outputHandler]);
 
 
-  return <div ref={terminalRef} style={{ width: '100%' }} />;
+  return <div ref={terminalRef} style={{ width: '100%' }} className='terminal-ui'/>;
 }
 
 TerminalUI.propTypes = {

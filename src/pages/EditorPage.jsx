@@ -9,27 +9,9 @@ import Chat from "../components/Chat";
 import RoleManager from "../components/RoleManager";
 import TerminalUI from "../components/TerminalUI";
 import { CopyToClipboard } from "react-copy-to-clipboard";
+import {Check, Clipboard, Key, EllipsisVertical} from 'lucide-react'
 
-// MUI Components
-import {
-  Button,
-  IconButton,
-  Avatar,
-  AvatarGroup,
-  Tooltip,
-  Zoom,
-  CircularProgress,
-} from "@mui/material";
-import {
-  CopyAll as CopyAllIcon,
-  ExitToApp as ExitToAppIcon,
-  HighlightOff as HighlightOffIcon,
-  Key as KeyIcon,
-  Code as CodeIcon,
-  Check as CheckIcon,
-  MoreVert as MoreVertIcon,
-  KeyboardArrowDown as KeyboardArrowDownIcon,
-} from "@mui/icons-material";
+import Button from '../components/Button';
 
 const LANGUAGE_TEMPLATES = {
   python: "# New Python Session Started\n\n",
@@ -238,37 +220,39 @@ export default function EditorPage() {
         <div className="session-details">
           <h2>{sessionId}</h2>
           <CopyToClipboard text={sessionId} onCopy={() => handleCopy("copiedSessionId")}>
-            <Tooltip title="Copy Session ID" arrow TransitionComponent={Zoom}>
-              <IconButton>{uiState.copiedSessionId ? <CheckIcon /> : <CopyAllIcon />}</IconButton>
-            </Tooltip>
+            <button title="Copy Session ID" className="copy-btn">
+              {uiState.copiedSessionId ? <Check /> : <Clipboard />}
+            </button>
           </CopyToClipboard>
           <CopyToClipboard text={sessionPassword} onCopy={() => handleCopy("copiedPass")}>
-            <Tooltip title="Copy Password" arrow TransitionComponent={Zoom}>
-              <IconButton>{uiState.copiedPass ? <CheckIcon /> : <KeyIcon />}</IconButton>
-            </Tooltip>
+            <button title="Copy Password" className="copy-btn">
+              {uiState.copiedPass ? <Check /> : <Key />}
+            </button>
           </CopyToClipboard>
         </div>
 
         <div className="avatar-role-manager">
-          <AvatarGroup max={4}>
-            {users.map((user) => (
-              <Avatar key={user.name} alt={user.name}>
-                {user.name[0]}
-              </Avatar>
+          <div className="user-avatars">
+            {users.slice(0, 4).map((user) => (
+              <div key={user.name} className="user-avatar" title={user.name}>
+                {user.name[0].toUpperCase()}
+              </div>
             ))}
             {users.length > 0 && userRole === "owner" && (
-              <IconButton
+              <button
+                className="manage-users-btn"
                 onClick={() =>
                   setUiState((prev) => ({
                     ...prev,
                     toggleRoleManagerDropdown: !prev.toggleRoleManagerDropdown,
                   }))
                 }
+                title="Manage Users"
               >
-                <MoreVertIcon />
-              </IconButton>
+                <EllipsisVertical />
+              </button>
             )}
-          </AvatarGroup>
+          </div>
           {userRole === "owner" && uiState.toggleRoleManagerDropdown && (
             <RoleManager
               users={users}
@@ -285,24 +269,22 @@ export default function EditorPage() {
 
         {userRole === "owner" ? (
           <Button
-            variant="contained"
-            endIcon={<HighlightOffIcon />}
-            color="error"
+            variant="error"
             onClick={handleEndSession}
             disabled={isSessionEnding}
-            startIcon={isSessionEnding ? <CircularProgress size={20} /> : null}
+            startIcon={isSessionEnding ? <div className="spinner"></div> : null}
+            className="end-session-btn"
           >
-            {isSessionEnding ? "Ending..." : "End"}
+            {isSessionEnding ? "Ending..." : "End Session"}
           </Button>
         ) : (
           <Button
-            variant="contained"
-            endIcon={<ExitToAppIcon />}
-            color="error"
+            variant="warning"
             onClick={handleLeaveSession}
             disabled={isSessionEnding}
+            className="leave-session-btn"
           >
-            Leave
+            Leave Session
           </Button>
         )}
       </div>
@@ -321,7 +303,7 @@ export default function EditorPage() {
           <div className="h-full">
             <div className="editor-head">
               <div className="editor-title">
-                <CodeIcon /> &nbsp; <span>Editor</span>
+                 <span>Editor</span>
               </div>
               <div className="editor-file-name">
                 Code.{language === "javascript" ? "js" : language === "python" ? "py" : "java"}
@@ -337,7 +319,7 @@ export default function EditorPage() {
                       }))
                     }
                   >
-                    {toTitleCase(language)} <KeyboardArrowDownIcon />
+                    {toTitleCase(language)} ↓
                   </button>
                   {uiState.isLangSelectDropdownOpen && (
                     <div className="lang-select-dropdown">
@@ -347,11 +329,11 @@ export default function EditorPage() {
                           key={lang}
                           onClick={() => handleLanguageChange(lang)}
                         >
-                          <CheckIcon
+                          <span
                             style={{
                               visibility: lang === language ? "visible" : "hidden",
                             }}
-                          />
+                          >✓</span>
                           {toTitleCase(lang)}
                         </div>
                       ))}

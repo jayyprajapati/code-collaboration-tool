@@ -3,15 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { generateSessionId, generateStrongPassword } from "../utils/session";
 import { verifySession, createNewSession } from "../api";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import Divider from "@mui/material/Divider";
-import Chip from "@mui/material/Chip";
-import Alert from "@mui/material/Alert";
-import AlertTitle from "@mui/material/AlertTitle";
-import CircularProgress from "@mui/material/CircularProgress";
+import Button from '../components/Button';
+import Input from '../components/Input';
+import Checkbox from '../components/Checkbox';
+import codeImage from '../assets/codeImage.png';
+import { CirclePlus, MoveRight } from 'lucide-react'
 
 export default function Dashboard() {
   const { currentUser } = useAuth();
@@ -106,108 +102,170 @@ export default function Dashboard() {
     }
   };
 
-  return (
-    <div className="dashboard">
-      {alert && (
-        <Alert
-          severity={alert.severity}
-          onClose={() => setAlert(null)}
-          sx={{ mb: 2 }}
-        >
-          <AlertTitle>{alert.title}</AlertTitle>
-          {alert.message}
-        </Alert>
-      )}
-      <h1>Welcome, {currentUser?.displayName}</h1>
-      <div className="session-actions">
-        <div className="">
-          <div className="session-create">
-            <h3>Create New Room</h3>
-            <div className="password-options">
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={createSessionConfig.useCustomPass}
-                    onChange={(e) =>
-                      setCreateSessionConfig((prev) => ({
-                        ...prev,
-                        useCustomPass: e.target.checked,
-                      }))
-                    }
-                    disabled={creatingRoom}
-                  />
-                }
-                label="Custom Password"
-              />
+  // Loading Spinner component
+  const LoadingSpinner = () => (
+    <div className="loading-spinner">
+      <div className="spinner"></div>
+    </div>
+  );
 
-              {createSessionConfig.useCustomPass && (
-                <TextField
-                  id="outlined-basic"
-                  label="Set Password"
-                  size="small"
+  // Alert component
+  const AlertMessage = ({ alert, onClose }) => {
+    if (!alert) return null;
+    
+    const alertClass = `custom-alert custom-alert--${alert.severity}`;
+    
+    return (
+      <div className={alertClass}>
+        <div className="alert-content">
+          <h4 className="alert-title">{alert.title}</h4>
+          <p className="alert-message">{alert.message}</p>
+        </div>
+        <button className="alert-close" onClick={onClose}>×</button>
+      </div>
+    );
+  };
+
+  return (
+    <div className="dashboard-container">
+      <div className="dashboard-left">
+        <div className="image-container">
+          <img src={codeImage} alt="Code Collaboration" className="hero-image" />
+          <div className="image-overlay">
+            <div className="dashboard-stats">
+              <div className="stat-card">
+                <div className="stat-icon">🚀</div>
+                <div className="stat-info">
+                  <h3>Quick Start</h3>
+                  <p>Create or join rooms instantly</p>
+                </div>
+              </div>
+              <div className="stat-card">
+                <div className="stat-icon">🔒</div>
+                <div className="stat-info">
+                  <h3>Secure</h3>
+                  <p>Password-protected sessions</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div className="dashboard-right">
+        <div className="dashboard-content">
+          <AlertMessage alert={alert} onClose={() => setAlert(null)} />
+          
+          <div className="dashboard-header">
+            <h4 className="welcome-title">
+              Welcome back, &nbsp;
+              <span className="user-name name-dashboard">{currentUser?.displayName?.split(' ')[0] || 'Developer'}!</span>
+            </h4>
+            <p className="dashboard-subtitle">
+              Ready to collaborate? Choose an option below to get started.
+            </p>
+          </div>
+
+          <div className="room-actions">
+            <div className="action-card create-card">
+              <div className="card-header">
+                <div className="card-icon create-icon"><CirclePlus /></div>
+                <div className="card-title">
+                  <h3>Create New Room</h3>
+                  <p>Start a new collaborative session</p>
+                </div>
+              </div>
+              
+              <div className="card-content">
+                <Checkbox
+                  checked={createSessionConfig.useCustomPass}
                   onChange={(e) =>
                     setCreateSessionConfig((prev) => ({
                       ...prev,
-                      password: e.target.value,
+                      useCustomPass: e.target.checked,
                     }))
                   }
-                  value={createSessionConfig.password}
-                  variant="outlined"
                   disabled={creatingRoom}
+                  label="Use custom password"
                 />
-              )}
 
-              <Button
-                variant="contained"
-                onClick={handleCreateSession}
-                size="small"
-                disabled={creatingRoom}
-                startIcon={creatingRoom ? <CircularProgress size={20} /> : null}
-              >
-                {creatingRoom ? "Creating..." : "Create Room"}
-              </Button>
+                {createSessionConfig.useCustomPass && (
+                  <Input
+                    // label="Custom Password"
+                    type="password"
+                    value={createSessionConfig.password}
+                    onChange={(e) =>
+                      setCreateSessionConfig((prev) => ({
+                        ...prev,
+                        password: e.target.value,
+                      }))
+                    }
+                    disabled={creatingRoom}
+                    placeholder="Enter your custom password"
+                  />
+                )}
+
+                <Button
+                  variant="primary"
+                  onClick={handleCreateSession}
+                  disabled={creatingRoom}
+                  startIcon={creatingRoom ? <LoadingSpinner /> : ''}
+                  className="create-room-btn"
+                >
+                  {creatingRoom ? 'Creating Room...' : 'Create Room'}
+                </Button>
+              </div>
             </div>
-          </div>
 
-          <Divider>
-            <Chip label="OR" size="small" />
-          </Divider>
+            <div className="divider">
+              <span className="divider-text">OR</span>
+            </div>
 
-          <div className="session-join">
-            <h3>Join Existing Room</h3>
-
-            <div className="join-session-container">
-              <TextField
-                id="outlined-basic"
-                label="Session ID"
-                size="small"
-                onChange={(e) =>
-                  setJoinData((p) => ({ ...p, id: e.target.value }))
-                }
-                value={joinData.id}
-                variant="outlined"
-                disabled={joiningRoom}
-              />
-              <TextField
-                id="outlined-basic"
-                label="Password"
-                size="small"
-                onChange={(e) =>
-                  setJoinData((p) => ({ ...p, pass: e.target.value }))
-                }
-                value={joinData.pass}
-                variant="outlined"
-                disabled={joiningRoom}
-              />
-              <Button
-                variant="outlined"
-                onClick={handleJoinSession}
-                size="small"
-                disabled={joiningRoom}
-                startIcon={joiningRoom ? <CircularProgress size={20} /> : null}
-              >
-                {joiningRoom ? "Joining..." : "Join Room"}
-              </Button>
+            <div className="action-card join-card">
+              <div className="card-header">
+                <div className="card-icon join-icon"><MoveRight /></div>
+                <div className="card-title">
+                  <h3>Join Existing Room</h3>
+                  <p>Connect to an ongoing session</p>
+                </div>
+              </div>
+              
+              <div className="card-content">
+                <Input
+                  // label="Session ID"
+                  value={joinData.id}
+                  onChange={(e) =>
+                    setJoinData((p) => ({ ...p, id: e.target.value }))
+                  }
+                  disabled={joiningRoom}
+                  placeholder="Enter session ID"
+                />
+                
+                <Input
+                  // label="Password"
+                  type="password"
+                  value={joinData.pass}
+                  onChange={(e) =>
+                    setJoinData((p) => ({ ...p, pass: e.target.value }))
+                  }
+                  disabled={joiningRoom}
+                  placeholder="Enter session password"
+                />
+                
+                <Button
+                  variant="secondary"
+                  onClick={handleJoinSession}
+                  disabled={joiningRoom || !joinData.id || !joinData.pass}
+                  startIcon={joiningRoom ? <LoadingSpinner /> : (
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M8.59 16.59L13.17 12L8.59 7.41L10 6l6 6-6 6-1.41-1.41z"/>
+                    </svg>
+                  )}
+                  className="join-room-btn"
+                >
+                  {joiningRoom ? 'Joining Room...' : 'Join Room'}
+                </Button>
+              </div>
             </div>
           </div>
         </div>
