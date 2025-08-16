@@ -5,12 +5,30 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import Button from '../components/Button';
 import codeImage from '../assets/codeImage.png';
-import { Users, MessageSquareDot, SquareTerminal, FileJson2 } from 'lucide-react';
+import { Users, MessageSquareDot, SquareTerminal, FileJson2, Monitor } from 'lucide-react';
 
 export default function Login() {
   const { currentUser } = useAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Mobile detection
+  useEffect(() => {
+    const checkMobile = () => {
+      const mobileBreakpoint = 768;
+      const userAgent = navigator.userAgent.toLowerCase();
+      const isMobileDevice = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/.test(userAgent);
+      const isSmallScreen = window.innerWidth < mobileBreakpoint;
+      
+      setIsMobile(isMobileDevice || isSmallScreen);
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   useEffect(() => {
     if (currentUser) {
@@ -96,11 +114,22 @@ export default function Login() {
           </div>
 
           <div className="login-action">
+            {isMobile && (
+              <div className="mobile-warning">
+                <div className="mobile-warning-icon">
+                  <Monitor size={24} />
+                </div>
+                <div className="mobile-warning-content">
+                  <h3>Desktop Experience Recommended</h3>
+                  <p>For the best coding collaboration experience, please use a desktop or laptop computer.</p>
+                </div>
+              </div>
+            )}
             <Button
               variant="primary"
               size="large"
               onClick={handleGoogleLogin}
-              disabled={loading}
+              disabled={loading || isMobile}
               startIcon={loading ? <LoadingSpinner /> : (
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
@@ -111,10 +140,10 @@ export default function Login() {
               )}
               className="google-login-btn"
             >
-              {loading ? 'Signing in...' : 'Continue with Google'}
+              {isMobile ? 'Use Desktop for Best Experience' : (loading ? 'Signing in...' : 'Continue with Google')}
             </Button>
             <p className="login-note">
-              Secure authentication powered by Google
+              {isMobile ? 'Please switch to a desktop or laptop computer' : 'Secure authentication powered by Google'}
             </p>
           </div>
         </div>
